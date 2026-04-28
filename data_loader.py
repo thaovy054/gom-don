@@ -5,7 +5,7 @@ import os
 
 class DataLoader:
     
-    def __init__(self, orders_csv='data/orders.csv', products_csv='data/product_locations.csv'):
+    def __init__(self, orders_csv='orders.csv', products_csv='products.csv'):
         self.orders_csv = orders_csv
         self.products_csv = products_csv
         self.df_orders = None
@@ -22,7 +22,7 @@ class DataLoader:
                 print(" Lỗi: File orders.csv trống!")
                 return False
             if self.df_products.empty:
-                print(" Lỗi: File product_locations.csv trống!")
+                print(" Lỗi: File products.csv trống!")
                 return False
                 
             print(" Đọc file CSV thành công!")
@@ -41,18 +41,19 @@ class DataLoader:
         
         orders = []
         
-        for _, row in self.df_orders.iterrows():
-            order_id = row['order_id']
-            product_ids = row['product_ids'].split(',')
-            quantities = list(map(int, row['quantities'].split(',')))
-            
-            # Lấy tọa độ các sản phẩm
+        # Nhóm các sản phẩm theo order_id
+        grouped = self.df_orders.groupby('order_id')
+        
+        for order_id, group in grouped:
             products = []
             coordinates = []
             total_qty = 0
             
-            for product_id, quantity in zip(product_ids, quantities):
-                product_id = product_id.strip()
+            for _, row in group.iterrows():
+                product_id = row['product_id'].strip()
+                quantity = int(row['quantity'])
+                
+                # Lấy tọa độ sản phẩm từ products.csv
                 product_data = self.df_products[self.df_products['product_id'] == product_id]
                 
                 if not product_data.empty:
@@ -86,7 +87,7 @@ class DataLoader:
     
     def get_order_by_id(self, orderID):
         """Lấy thông tin 1 đơn hàng cụ thể"""
-        if self.df_orders is None:
+        if self.df_orders is None or self.df_products is None:
             return None
         
         order_data = self.df_orders[self.df_orders['order_id'] == orderID]
@@ -94,16 +95,14 @@ class DataLoader:
         if order_data.empty:
             return None
         
-        row = order_data.iloc[0]
-        product_ids = row['product_ids'].split(',')
-        quantities = list(map(int, row['quantities'].split(',')))
-        
         products = []
         coordinates = []
         total_qty = 0
         
-        for product_id, quantity in zip(product_ids, quantities):
-            product_id = product_id.strip()
+        for _, row in order_data.iterrows():
+            product_id = row['product_id'].strip()
+            quantity = int(row['quantity'])
+            
             product_data = self.df_products[self.df_products['product_id'] == product_id]
             
             if not product_data.empty:

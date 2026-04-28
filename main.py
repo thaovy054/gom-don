@@ -227,7 +227,7 @@ def run_optimization(db, all_orders):
     print("    KẾT QUẢ TỐI ƯU ĐƯỜNG ĐI")
 
     print(f"\n LỘ TRÌNH GOM ĐƠN:")
-    print(f"   {' → '.join(result['route'])}")
+    print(f"   {' → '.join(map(str, result['route']))}")
 
     # Tính phần trăm tiết kiệm so với từng đơn lẻ
     if traditional_distance > 0:

@@ -10,7 +10,7 @@ class WarehouseGUI:
         self.root.geometry("900x600")
         
         # Khởi tạo các lớp xử lý dữ liệu
-        self.db = DataLoader('warehouse.db')
+        self.db = DataLoader()
         self.adaboost = AdaboostWeightPredictor()
         self.dijkstra = DijkstraPathFinder(self.adaboost)
         self.all_orders = []
