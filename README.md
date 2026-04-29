@@ -39,7 +39,7 @@ The program is organized into modular components for maintainability and scalabi
 - **Purpose**: Handles database connections and data loading from SQLite database
 - **Functions**:
   - `connect()`: Establishes connection to SQLite database
-  - `get_all_orders_from_sql()`: Loads all orders with product details and calculates center locations
+  - `get_all_orders_from_csv()`: Loads all orders with product details and calculates center locations
   - `get_order_by_id()`: Retrieves specific order information
   - `close()`: Closes database connection
 - **Dependencies**: sqlite3, pandas, numpy
@@ -80,7 +80,7 @@ The program is organized into modular components for maintainability and scalabi
 
 #### Data Loading (`data_loader.py`)
 ```python
-def get_all_orders_from_sql(self):
+def get_all_orders_from_csv(self):
     """
     Lấy tất cả đơn hàng từ SQL database và tính toán vị trí trung tâm
     

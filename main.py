@@ -61,7 +61,7 @@ def main():
     print("\n ĐỌC DỮ LIỆU ĐƠN HÀNG TỪ CSV")
     print("-"*50)
 
-    all_orders = db.get_all_orders_from_sql()
+    all_orders = db.get_all_orders_from_csv()
 
     if not all_orders:
         print(" Không có dữ liệu đơn hàng!")
