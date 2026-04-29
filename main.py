@@ -196,28 +196,23 @@ def run_optimization(db, all_orders):
     optimizer = RouteOptimizer(dist_matrix, selected_orders)
 
     # Tính các quãng đường để so sánh
-    default_result = optimizer.get_route_by_order()
-    default_distance = default_result[1]  # Thứ tự nhập vào
-    
+    route_indices, default_distance = optimizer.get_route_by_order()  # Thứ tự nhập vào
     traditional_distance = optimizer.get_traditional_distance()  # Từng đơn lẻ
     
-    # Lấy kết quả tối ưu
-    route, total_distance = optimizer.tsp_nearest_neighbor()
-    
-    # Tạo route names
+    # Tạo route names từ kết quả tối ưu (get_route_by_order)
     route_names = []
-    for idx in route:
+    for idx in route_indices:
         if idx == 0:  # depot
             route_names.append("KHO")
         else:
             route_names.append(selected_orders[idx-1]['orderID'])
     
-    # Tạo result dictionary để tương thích với code cũ
+    # Tạo result dictionary
     result = {
         'route': route_names,
-        'total_distance': total_distance,
-        'num_stops': len(route) - 2,  # trừ depot đầu và cuối
-        'total_time': total_distance / 30  # 30 mét/phút
+        'total_distance': default_distance,
+        'num_stops': len(selected_orders),
+        'total_time': default_distance / 30  # 30 mét/phút
     }
 
     # In ma trận khoảng cách

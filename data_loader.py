@@ -34,7 +34,7 @@ class DataLoader:
             print(f" Lỗi đọc file: {e}")
             return False
     
-    def get_all_orders_from_sql(self):
+    def get_all_orders_from_csv(self):
         if self.df_orders is None or self.df_products is None:
             print(" Lỗi: Dữ liệu chưa được load!")
             return []

@@ -136,38 +136,6 @@ class RouteOptimizer:
         
         return route_indices, total_distance
     
-    def tsp_nearest_neighbor(self):
-        """TSP sử dụng Nearest Neighbor heuristic"""
-        n = len(self.dist_matrix)
-        visited = [False] * n
-        route = [self.depot_index]
-        visited[self.depot_index] = True
-        
-        # Bắt đầu từ depot, tìm điểm gần nhất chưa thăm
-        current = self.depot_index
-        total_distance = 0
-        
-        for _ in range(n - 1):
-            min_dist = float('inf')
-            next_point = -1
-            
-            for j in range(n):
-                if not visited[j] and self.dist_matrix[current][j] < min_dist:
-                    min_dist = self.dist_matrix[current][j]
-                    next_point = j
-            
-            if next_point != -1:
-                route.append(next_point)
-                visited[next_point] = True
-                total_distance += min_dist
-                current = next_point
-        
-        # Quay về depot
-        total_distance += self.dist_matrix[current][self.depot_index]
-        route.append(self.depot_index)
-        
-        return route, total_distance
-    
     def print_distance_matrix(self):
         """In ma trận khoảng cách"""
         n = len(self.dist_matrix)
@@ -199,20 +167,3 @@ class RouteOptimizer:
             total_distance += self.dist_matrix[i][self.depot_index]
         
         return total_distance
-        # Tính lộ trình tối ưu bằng TSP
-        route_indices, total_distance = self.tsp_nearest_neighbor()
-        
-        route_sequence = []
-        for idx in route_indices:
-            if idx == self.depot_index:
-                route_sequence.append(" KHO")
-            else:
-                route_sequence.append(self.orders[idx-1]['orderID'])
-        
-        return {
-            'distance_matrix': self.dist_matrix,
-            'route': route_sequence,
-            'total_distance': total_distance,
-            'total_time': total_distance / 30,  # 30 mét/phút
-            'num_stops': len(self.orders)
-        }
